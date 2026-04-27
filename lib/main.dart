@@ -205,6 +205,11 @@ class _StopwatchHomePageState extends State<StopwatchHomePage>
     );
   }
 
+  void _exitApp() {
+    HapticFeedback.lightImpact();
+    SystemNavigator.pop();
+  }
+
   String _formatDuration(Duration d) {
     final int hours = d.inHours;
     final int minutes = d.inMinutes.remainder(60);
@@ -223,18 +228,21 @@ class _StopwatchHomePageState extends State<StopwatchHomePage>
     return Scaffold(
       appBar: AppBar(
         title: const SizedBox.shrink(),
-        leading: GestureDetector(
-          onLongPress: _clearAll,
-          child: const Tooltip(
-            message: 'Long press to clear',
-            child: Icon(Icons.clear_all_rounded),
-          ),
+        leading: IconButton(
+          tooltip: 'Exit',
+          icon: const Icon(Icons.exit_to_app_rounded),
+          onPressed: _exitApp,
         ),
         actions: <Widget>[
           IconButton(
-            tooltip: 'Copy',
-            onPressed: _copyAll,
-            icon: const Icon(Icons.copy_all_rounded),
+            tooltip: 'Long press to clear',
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Long press Clear to remove all entries.')),
+              );
+            },
+            onLongPress: _clearAll,
+            icon: const Icon(Icons.clear_all_rounded),
           ),
         ],
       ),
